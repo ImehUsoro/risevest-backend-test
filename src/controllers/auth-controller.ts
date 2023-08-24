@@ -9,6 +9,7 @@ import {
   registerUserService,
 } from "../services/auth-service";
 import { generateJWT } from "../helpers/jwt";
+import { getTopUsersWithLatestCommentsService } from "../services/post-service";
 
 export const registerUserController = async (
   req: Request,
@@ -97,7 +98,7 @@ export const getUserController = async (
 ) => {
   try {
     const { id } = req.params;
-    
+
     // if (req.currentUser?.id !== id) {
     //   throw new ForbiddenError();
     // }
@@ -107,6 +108,20 @@ export const getUserController = async (
     if (!userPosts) throw new NotFoundError("User not found");
 
     return successResponse(res, StatusCodes.OK, userPosts);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTopUserPostWithLatestCommentController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const users = await getTopUsersWithLatestCommentsService();
+
+    return successResponse(res, StatusCodes.OK, users);
   } catch (error) {
     next(error);
   }

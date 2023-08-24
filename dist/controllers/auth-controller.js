@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserController = exports.getUserController = exports.getUsersController = exports.loginController = exports.registerUserController = void 0;
+exports.updateUserController = exports.getTopUserPostWithLatestCommentController = exports.getUserController = exports.getUsersController = exports.loginController = exports.registerUserController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const helpers_1 = require("../helpers");
 const auth_service_1 = require("../services/auth-service");
 const jwt_1 = require("../helpers/jwt");
+const post_service_1 = require("../services/post-service");
 const registerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstName, lastName, email, password } = req.body;
@@ -88,6 +89,16 @@ const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.getUserController = getUserController;
+const getTopUserPostWithLatestCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield (0, post_service_1.getTopUsersWithLatestCommentsService)();
+        return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, users);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getTopUserPostWithLatestCommentController = getTopUserPostWithLatestCommentController;
 const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
     }

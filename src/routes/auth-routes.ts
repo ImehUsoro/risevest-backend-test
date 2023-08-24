@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getTopUserPostWithLatestCommentController,
   getUserController,
   getUsersController,
   loginController,
@@ -26,5 +27,8 @@ router.route("/users").get(getUsersController);
 
 //Get a user
 router.route("/users/:id/posts").get(getUserController);
+
+// Get Users With The Top 3 Most Posts And Their Latest Comment
+router.route("/users/top-three").get(getTopUserPostWithLatestCommentController)
 
 export { router as authenticationRoutes };

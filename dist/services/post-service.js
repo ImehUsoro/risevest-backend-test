@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findPostService = exports.createPostService = void 0;
+exports.getTopUsersWithLatestCommentsService = exports.findPostService = exports.createPostService = void 0;
 const client_1 = require("../client");
 const createPostService = (content, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const post = yield client_1.prisma.post.create({ data: { content, userId } });
@@ -22,3 +22,38 @@ const findPostService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.findPostService = findPostService;
+const getTopUsersWithLatestCommentsService = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const topUsersWithMostPosts = yield client_1.prisma.user.findMany({
+            take: 3,
+            orderBy: {
+                posts: {
+                    _count: "desc",
+                },
+            },
+            include: {
+                posts: true,
+            },
+        });
+        const usersWithLatestComment = yield Promise.all(topUsersWithMostPosts.map((user) => __awaiter(void 0, void 0, void 0, function* () {
+            const latestComment = yield client_1.prisma.comment.findFirst({
+                where: {
+                    userId: user.id,
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+            });
+            return {
+                user,
+                latestComment,
+            };
+        })));
+        return usersWithLatestComment;
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+});
+exports.getTopUsersWithLatestCommentsService = getTopUsersWithLatestCommentsService;
