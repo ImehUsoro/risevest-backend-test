@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.commentRoutes = void 0;
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+exports.commentRoutes = router;
+router.route("/create").post((req, res) => { });
+router.route("/").get((req, res) => { });
+router.route("/get-single/:id").get((req, res) => { });
+router.route("/update-single/:id").patch((req, res) => { });
+router.route("/delete").delete((req, res) => { });

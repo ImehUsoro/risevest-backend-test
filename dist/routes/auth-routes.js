@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authenticationRoutes = void 0;
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+exports.authenticationRoutes = router;
+router.route("/register-user").post((req, res) => { });
+router.route("/login").post((req, res) => { });
+router.route("/get-users").get((req, res) => { });
+router.route("/get-user/:id").get((req, res) => { });
+router.route("/update-user/:id").patch((req, res) => { });
