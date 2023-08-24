@@ -31,6 +31,7 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
+        console.log("=========> we're here");
         logger_1.default.error(err);
         yield client_1.prisma.$disconnect();
         process.exit(1);

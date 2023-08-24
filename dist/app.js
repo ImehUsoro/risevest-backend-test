@@ -31,5 +31,6 @@ app.use((0, express_rate_limit_1.default)({
 }));
 app.use("/api/v1", routes_1.applicationRoutes);
 app.use(middleware_1.notFound);
+// app.use(dbErrors);
 app.use(middleware_1.errorHandlerMiddleware);
 exports.default = app;

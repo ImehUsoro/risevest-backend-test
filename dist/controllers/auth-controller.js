@@ -10,13 +10,89 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserController = exports.getUserController = exports.getUsersController = exports.loginController = exports.registerUserController = void 0;
-const registerUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
+const http_status_codes_1 = require("http-status-codes");
+const errors_1 = require("../errors");
+const helpers_1 = require("../helpers");
+const auth_service_1 = require("../services/auth-service");
+const jwt_1 = require("../helpers/jwt");
+const registerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { firstName, lastName, email, password } = req.body;
+        const userExists = yield (0, auth_service_1.findUserService)(email);
+        if (userExists)
+            throw new errors_1.BadRequestError("User already exists");
+        const user = yield (0, auth_service_1.registerUserService)({
+            firstName,
+            lastName,
+            email,
+            password,
+        });
+        if (!user)
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ errors: [{ message: "User not created" }] });
+        delete user.password;
+        return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.CREATED, user);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.registerUserController = registerUserController;
-const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
+const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+        const user = yield (0, auth_service_1.findUserService)(email);
+        if (!user)
+            throw new errors_1.BadRequestError("Invalid credentials");
+        const passwordMatch = yield helpers_1.Password.comparePassword(password, user === null || user === void 0 ? void 0 : user.password);
+        if (!passwordMatch)
+            throw new errors_1.BadRequestError("Invalid credentials");
+        const userJWT = (0, jwt_1.generateJWT)(req, {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+        });
+        delete user.password;
+        return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, { user, token: userJWT });
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.loginController = loginController;
-const getUsersController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
+const getUsersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield (0, auth_service_1.findAllUsersService)();
+        return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, users);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.getUsersController = getUsersController;
-const getUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
+const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        // if (req.currentUser?.id !== id) {
+        //   throw new ForbiddenError();
+        // }
+        const userPosts = yield (0, auth_service_1.findUserPostsService)(id);
+        if (!userPosts)
+            throw new errors_1.NotFoundError("User not found");
+        return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, userPosts);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.getUserController = getUserController;
-const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
+const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.updateUserController = updateUserController;

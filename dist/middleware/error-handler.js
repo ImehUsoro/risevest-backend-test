@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.errorHandlerMiddleware = void 0;
+exports.dbErrors = exports.errorHandlerMiddleware = void 0;
 const client_1 = require("@prisma/client");
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
@@ -24,8 +24,6 @@ const errorHandlerMiddleware = (err, req, res, next) => __awaiter(void 0, void 0
         logger_1.default.error(err.serializeErrors());
         return res.status(err.statusCode).json({ errors: err.serializeErrors() });
     }
-    if (process.env.NODE_ENV === "production")
-        logger_1.default.error({ err });
     logger_1.default.error({ err });
     // Prisma related errors
     if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
@@ -52,3 +50,17 @@ const errorHandlerMiddleware = (err, req, res, next) => __awaiter(void 0, void 0
     });
 });
 exports.errorHandlerMiddleware = errorHandlerMiddleware;
+const dbErrors = (err, req, res, next) => {
+    if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
+        // console.log(err);
+        return res
+            .status(400)
+            .json({ error: "Prisma client request error", message: err.message });
+    }
+    else if (err instanceof client_1.Prisma.PrismaClientUnknownRequestError) {
+        console.error("Unknown Prisma error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+    next(err);
+};
+exports.dbErrors = dbErrors;

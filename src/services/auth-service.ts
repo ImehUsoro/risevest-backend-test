@@ -1,13 +1,58 @@
 import { User } from "@prisma/client";
 import { prisma } from "../client";
 
-export const registerUserService = async (
-  email: string,
-  password: string
-) => {};
+export interface CreateUserData
+  extends Omit<User, "id" | "createdAt" | "updatedAt"> {}
 
-export const findUser = async (email: string): Promise<User | null> => {
+export type ReturnedUser = Partial<Pick<User, "password">> &
+  Omit<User, "password">;
+
+export const registerUserService = async (
+  data: CreateUserData
+): Promise<ReturnedUser | null> => {
+  const user = await prisma.user.create({ data });
+  return user;
+};
+
+export const findUserService = async (
+  email: string
+): Promise<ReturnedUser | null> => {
   return await prisma.user.findUnique({
     where: { email },
+  });
+};
+
+export const findUserPostsService = async (id: string) => {
+  return await prisma.user.findUnique({
+    where: { id },
+    include: {
+      posts: {
+        include: {
+          comments: {
+            select: {
+              content: true,
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+export const findAllUsersService = async (): Promise<ReturnedUser[]> => {
+  return await prisma.user.findMany({
+    include: {
+      posts: {
+        include: {
+          comments: true,
+        },
+      },
+    },
   });
 };

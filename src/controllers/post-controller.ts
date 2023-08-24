@@ -1,8 +1,50 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
+import { createPostService, findPostService } from "../services/post-service";
+import { successResponse } from "../helpers";
+import { addCommentToPostService } from "../services/comment-service";
 
-export const createPostController = async (req: Request, res: Response) => {};
+export const createPostController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { content } = req.body;
+
+    const post = await createPostService(content, req.currentUser!.id);
+
+    return successResponse(res, StatusCodes.CREATED, post);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addCommentToPostController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { postId } = req.params;
+    const { content } = req.body;
+
+    const post = findPostService(postId);
+
+    if (!post) throw new NotFoundError("Post not found");
+
+    const comment = await addCommentToPostService({
+      content,
+      userId: req.currentUser!.id,
+      postId,
+    });
+
+    return successResponse(res, StatusCodes.CREATED, comment);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getPostsController = async (req: Request, res: Response) => {};
 

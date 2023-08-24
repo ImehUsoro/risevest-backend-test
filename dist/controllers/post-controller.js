@@ -9,9 +9,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePostController = exports.updatePostController = exports.getPostController = exports.getPostsController = exports.createPostController = void 0;
-const createPostController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
+exports.deletePostController = exports.updatePostController = exports.getPostController = exports.getPostsController = exports.addCommentToPostController = exports.createPostController = void 0;
+const http_status_codes_1 = require("http-status-codes");
+const errors_1 = require("../errors");
+const post_service_1 = require("../services/post-service");
+const helpers_1 = require("../helpers");
+const comment_service_1 = require("../services/comment-service");
+const createPostController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { content } = req.body;
+        const post = yield (0, post_service_1.createPostService)(content, req.currentUser.id);
+        return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.CREATED, post);
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.createPostController = createPostController;
+const addCommentToPostController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { postId } = req.params;
+        const { content } = req.body;
+        const post = (0, post_service_1.findPostService)(postId);
+        if (!post)
+            throw new errors_1.NotFoundError("Post not found");
+        const comment = yield (0, comment_service_1.addCommentToPostService)({
+            content,
+            userId: req.currentUser.id,
+            postId,
+        });
+        return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.CREATED, comment);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.addCommentToPostController = addCommentToPostController;
 const getPostsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
 exports.getPostsController = getPostsController;
 const getPostController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });

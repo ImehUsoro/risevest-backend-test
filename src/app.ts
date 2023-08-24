@@ -2,9 +2,10 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import Logger from "./logger";
 import { applicationRoutes } from "./routes";
-import { errorHandlerMiddleware, notFound } from "./middleware";
+import { dbErrors, errorHandlerMiddleware, notFound } from "./middleware";
 import { StatusCodes } from "http-status-codes";
 import rateLimiter from "express-rate-limit";
+import { Prisma } from "@prisma/client";
 
 const app: Application = express();
 
@@ -35,6 +36,7 @@ app.use("/api/v1", applicationRoutes);
 
 app.use(notFound);
 
+// app.use(dbErrors);
 app.use(errorHandlerMiddleware);
 
 export default app;

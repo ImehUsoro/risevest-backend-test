@@ -19,6 +19,7 @@ const start = async () => {
       Logger.info(`Server started on port ${PORT}`);
     });
   } catch (err) {
+    console.log("=========> we're here");
     Logger.error(err);
     await prisma.$disconnect();
     process.exit(1);

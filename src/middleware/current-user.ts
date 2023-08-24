@@ -28,6 +28,9 @@ export const currentUserMiddleware = (
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as UserPayload;
 
     req.currentUser = payload;
-  } catch (error) {}
+  } catch (error) {
+    console.log({ error });
+    next(error);
+  }
   next();
 };

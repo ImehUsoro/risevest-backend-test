@@ -9,13 +9,51 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findUser = exports.registerUserService = void 0;
+exports.findAllUsersService = exports.findUserPostsService = exports.findUserService = exports.registerUserService = void 0;
 const client_1 = require("../client");
-const registerUserService = (email, password) => __awaiter(void 0, void 0, void 0, function* () { });
+const registerUserService = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield client_1.prisma.user.create({ data });
+    return user;
+});
 exports.registerUserService = registerUserService;
-const findUser = (email) => __awaiter(void 0, void 0, void 0, function* () {
+const findUserService = (email) => __awaiter(void 0, void 0, void 0, function* () {
     return yield client_1.prisma.user.findUnique({
         where: { email },
     });
 });
-exports.findUser = findUser;
+exports.findUserService = findUserService;
+const findUserPostsService = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield client_1.prisma.user.findUnique({
+        where: { id },
+        include: {
+            posts: {
+                include: {
+                    comments: {
+                        select: {
+                            content: true,
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+});
+exports.findUserPostsService = findUserPostsService;
+const findAllUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
+    return yield client_1.prisma.user.findMany({
+        include: {
+            posts: {
+                include: {
+                    comments: true,
+                },
+            },
+        },
+    });
+});
+exports.findAllUsersService = findAllUsersService;

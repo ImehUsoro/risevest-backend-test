@@ -2,10 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticationRoutes = void 0;
 const express_1 = require("express");
+const auth_controller_1 = require("../controllers/auth-controller");
+const validate_request_1 = require("../helpers/validate-request");
+const schemas_1 = require("../schemas");
+const middleware_1 = require("../middleware");
 const router = (0, express_1.Router)();
 exports.authenticationRoutes = router;
-router.route("/register-user").post((req, res) => { });
-router.route("/login").post((req, res) => { });
-router.route("/get-users").get((req, res) => { });
-router.route("/get-user/:id").get((req, res) => { });
-router.route("/update-user/:id").patch((req, res) => { });
+router
+    .route("/register-user")
+    .post(schemas_1.registerUserSchema, validate_request_1.validateRequestMiddleware, auth_controller_1.registerUserController);
+router
+    .route("/login")
+    .post(schemas_1.loginUserSchema, validate_request_1.validateRequestMiddleware, auth_controller_1.loginController);
+// protected routes
+router.use(middleware_1.currentUserMiddleware);
+//Get all users
+router.route("/users").get(auth_controller_1.getUsersController);
+//Get a user
+router.route("/users/:id/posts").get(auth_controller_1.getUserController);

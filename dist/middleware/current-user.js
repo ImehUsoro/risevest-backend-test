@@ -22,7 +22,10 @@ const currentUserMiddleware = (req, res, next) => {
         const payload = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.currentUser = payload;
     }
-    catch (error) { }
+    catch (error) {
+        console.log({ error });
+        next(error);
+    }
     next();
 };
 exports.currentUserMiddleware = currentUserMiddleware;

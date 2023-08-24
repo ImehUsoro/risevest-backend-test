@@ -16,8 +16,6 @@ export const errorHandlerMiddleware = async (
     return res.status(err.statusCode).json({ errors: err.serializeErrors() });
   }
 
-  if (process.env.NODE_ENV === "production") Logger.error({ err });
-
   Logger.error({ err });
 
   // Prisma related errors
@@ -47,4 +45,22 @@ export const errorHandlerMiddleware = async (
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     errors: [{ message: err.message }],
   });
+};
+
+export const dbErrors = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    // console.log(err);
+    return res
+      .status(400)
+      .json({ error: "Prisma client request error", message: err.message });
+  } else if (err instanceof Prisma.PrismaClientUnknownRequestError) {
+    console.error("Unknown Prisma error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+  next(err);
 };
