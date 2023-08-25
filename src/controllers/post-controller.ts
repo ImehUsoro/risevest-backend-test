@@ -37,7 +37,9 @@ export const addCommentToPostController = async (
     const { postId } = req.params;
     const { content } = req.body;
 
-    const post = findPostService(postId);
+    const post = await findPostService(postId);
+
+    console.log({ post });
 
     if (!post) throw new NotFoundError("Post not found");
 
@@ -46,6 +48,13 @@ export const addCommentToPostController = async (
       userId: req.currentUser!.id,
       postId,
     });
+
+    // update the owner of the post's redis cache
+
+    const authorPosts = await findUserPostsService(post.userId);
+
+    const cacheKey = `user:${post.userId}`;
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(authorPosts));
 
     return successResponse(res, StatusCodes.CREATED, comment);
   } catch (error) {

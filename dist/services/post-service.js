@@ -19,6 +19,15 @@ exports.createPostService = createPostService;
 const findPostService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prismaClient_1.prisma.post.findUnique({
         where: { id },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                },
+            },
+        },
     });
 });
 exports.findPostService = findPostService;

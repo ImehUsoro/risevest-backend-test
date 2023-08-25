@@ -17,6 +17,15 @@ export const createPostService = async (
 export const findPostService = async (id: string): Promise<Post | null> => {
   return await prisma.post.findUnique({
     where: { id },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
   });
 };
 
