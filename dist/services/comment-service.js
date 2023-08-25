@@ -10,9 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addCommentToPostService = void 0;
-const client_1 = require("../client");
+const prismaClient_1 = require("../prismaClient");
 const addCommentToPostService = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield client_1.prisma.comment.create({
+    return yield prismaClient_1.prisma.comment.create({
         data,
         include: {
             user: {

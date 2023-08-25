@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
 const logger_1 = __importDefault(require("./logger"));
 const http_1 = require("http");
-const client_1 = require("./client");
+const prismaClient_1 = require("./prismaClient");
+const redis_1 = require("./redis");
 const PORT = process.env.PORT || 5001;
 // start the express app
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,17 +24,20 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
         throw new Error("JWT must be defined");
     }
     try {
-        yield client_1.prisma.$connect();
+        yield prismaClient_1.prisma.$connect();
         logger_1.default.info("connected to the database");
         const httpServer = (0, http_1.createServer)(app_1.default);
         httpServer.listen(PORT, () => {
             logger_1.default.info(`Server started on port ${PORT}`);
         });
+        // redis connection
+        redis_1.redisClient.on("error", (err) => logger_1.default.error("Redis Client Error", err));
+        redis_1.redisClient.on("connect", () => logger_1.default.info("Redis Client Connected"));
+        yield redis_1.redisClient.connect();
     }
     catch (err) {
-        console.log("=========> we're here");
         logger_1.default.error(err);
-        yield client_1.prisma.$disconnect();
+        yield prismaClient_1.prisma.$disconnect();
         process.exit(1);
     }
 });

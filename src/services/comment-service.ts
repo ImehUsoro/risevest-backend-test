@@ -1,5 +1,5 @@
 import { Comment } from "@prisma/client";
-import { prisma } from "../client";
+import { prisma } from "../prismaClient";
 
 export const addCommentToPostService = async (data: {
   content: string;

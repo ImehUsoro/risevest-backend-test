@@ -10,21 +10,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTopUsersWithLatestCommentsService = exports.findPostService = exports.createPostService = void 0;
-const client_1 = require("../client");
+const prismaClient_1 = require("../prismaClient");
 const createPostService = (content, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const post = yield client_1.prisma.post.create({ data: { content, userId } });
+    const post = yield prismaClient_1.prisma.post.create({ data: { content, userId } });
     return post;
 });
 exports.createPostService = createPostService;
 const findPostService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield client_1.prisma.post.findUnique({
+    return yield prismaClient_1.prisma.post.findUnique({
         where: { id },
     });
 });
 exports.findPostService = findPostService;
 const getTopUsersWithLatestCommentsService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const topUsersWithMostPosts = yield client_1.prisma.user.findMany({
+        const topUsersWithMostPosts = yield prismaClient_1.prisma.user.findMany({
             take: 3,
             orderBy: {
                 posts: {
@@ -36,7 +36,7 @@ const getTopUsersWithLatestCommentsService = () => __awaiter(void 0, void 0, voi
             },
         });
         const usersWithLatestComment = yield Promise.all(topUsersWithMostPosts.map((user) => __awaiter(void 0, void 0, void 0, function* () {
-            const latestComment = yield client_1.prisma.comment.findFirst({
+            const latestComment = yield prismaClient_1.prisma.comment.findFirst({
                 where: {
                     userId: user.id,
                 },

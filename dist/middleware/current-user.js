@@ -23,7 +23,6 @@ const currentUserMiddleware = (req, res, next) => {
         req.currentUser = payload;
     }
     catch (error) {
-        console.log({ error });
         next(error);
     }
     next();

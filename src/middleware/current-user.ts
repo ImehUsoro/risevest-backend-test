@@ -29,7 +29,6 @@ export const currentUserMiddleware = (
 
     req.currentUser = payload;
   } catch (error) {
-    console.log({ error });
     next(error);
   }
   next();

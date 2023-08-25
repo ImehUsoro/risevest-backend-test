@@ -52,7 +52,6 @@ const errorHandlerMiddleware = (err, req, res, next) => __awaiter(void 0, void 0
 exports.errorHandlerMiddleware = errorHandlerMiddleware;
 const dbErrors = (err, req, res, next) => {
     if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
-        // console.log(err);
         return res
             .status(400)
             .json({ error: "Prisma client request error", message: err.message });

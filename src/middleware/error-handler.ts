@@ -54,7 +54,6 @@ export const dbErrors = (
   next: NextFunction
 ) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    // console.log(err);
     return res
       .status(400)
       .json({ error: "Prisma client request error", message: err.message });

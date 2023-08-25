@@ -4,6 +4,8 @@ import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { createPostService, findPostService } from "../services/post-service";
 import { successResponse } from "../helpers";
 import { addCommentToPostService } from "../services/comment-service";
+import { findUserPostsService } from "../services/auth-service";
+import { redisClient } from "../redis";
 
 export const createPostController = async (
   req: Request,
@@ -14,6 +16,11 @@ export const createPostController = async (
     const { content } = req.body;
 
     const post = await createPostService(content, req.currentUser!.id);
+
+    const userPosts = await findUserPostsService(req.currentUser!.id);
+
+    const cacheKey = `user:${req.currentUser!.id}`;
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
 
     return successResponse(res, StatusCodes.CREATED, post);
   } catch (error) {

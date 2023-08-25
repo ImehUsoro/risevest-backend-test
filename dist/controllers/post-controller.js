@@ -15,10 +15,15 @@ const errors_1 = require("../errors");
 const post_service_1 = require("../services/post-service");
 const helpers_1 = require("../helpers");
 const comment_service_1 = require("../services/comment-service");
+const auth_service_1 = require("../services/auth-service");
+const redis_1 = require("../redis");
 const createPostController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { content } = req.body;
         const post = yield (0, post_service_1.createPostService)(content, req.currentUser.id);
+        const userPosts = yield (0, auth_service_1.findUserPostsService)(req.currentUser.id);
+        const cacheKey = `user:${req.currentUser.id}`;
+        yield redis_1.redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.CREATED, post);
     }
     catch (error) {

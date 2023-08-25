@@ -10,6 +10,7 @@ import {
 } from "../services/auth-service";
 import { generateJWT } from "../helpers/jwt";
 import { getTopUsersWithLatestCommentsService } from "../services/post-service";
+import { redisClient } from "../redis";
 
 export const registerUserController = async (
   req: Request,
@@ -99,13 +100,13 @@ export const getUserController = async (
   try {
     const { id } = req.params;
 
-    // if (req.currentUser?.id !== id) {
-    //   throw new ForbiddenError();
-    // }
-
     const userPosts = await findUserPostsService(id);
 
     if (!userPosts) throw new NotFoundError("User not found");
+
+    const cacheKey = `user:${id}`;
+
+    await redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
 
     return successResponse(res, StatusCodes.OK, userPosts);
   } catch (error) {

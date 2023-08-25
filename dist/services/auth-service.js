@@ -10,20 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findAllUsersService = exports.findUserPostsService = exports.findUserService = exports.registerUserService = void 0;
-const client_1 = require("../client");
+const prismaClient_1 = require("../prismaClient");
 const registerUserService = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield client_1.prisma.user.create({ data });
+    const user = yield prismaClient_1.prisma.user.create({ data });
     return user;
 });
 exports.registerUserService = registerUserService;
 const findUserService = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield client_1.prisma.user.findUnique({
+    return yield prismaClient_1.prisma.user.findUnique({
         where: { email },
     });
 });
 exports.findUserService = findUserService;
 const findUserPostsService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield client_1.prisma.user.findUnique({
+    return yield prismaClient_1.prisma.user.findUnique({
         where: { id },
         include: {
             posts: {
@@ -35,6 +35,7 @@ const findUserPostsService = (id) => __awaiter(void 0, void 0, void 0, function*
                                 select: {
                                     firstName: true,
                                     lastName: true,
+                                    createdAt: true,
                                 },
                             },
                         },
@@ -46,7 +47,7 @@ const findUserPostsService = (id) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.findUserPostsService = findUserPostsService;
 const findAllUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield client_1.prisma.user.findMany({
+    return yield prismaClient_1.prisma.user.findMany({
         include: {
             posts: {
                 include: {

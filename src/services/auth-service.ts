@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { prisma } from "../client";
+import { prisma } from "../prismaClient";
 
 export interface CreateUserData
   extends Omit<User, "id" | "createdAt" | "updatedAt"> {}
@@ -35,6 +35,7 @@ export const findUserPostsService = async (id: string) => {
                 select: {
                   firstName: true,
                   lastName: true,
+                  createdAt: true,
                 },
               },
             },

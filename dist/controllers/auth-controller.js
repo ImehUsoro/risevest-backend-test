@@ -16,6 +16,7 @@ const helpers_1 = require("../helpers");
 const auth_service_1 = require("../services/auth-service");
 const jwt_1 = require("../helpers/jwt");
 const post_service_1 = require("../services/post-service");
+const redis_1 = require("../redis");
 const registerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstName, lastName, email, password } = req.body;
@@ -76,12 +77,11 @@ exports.getUsersController = getUsersController;
 const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        // if (req.currentUser?.id !== id) {
-        //   throw new ForbiddenError();
-        // }
         const userPosts = yield (0, auth_service_1.findUserPostsService)(id);
         if (!userPosts)
             throw new errors_1.NotFoundError("User not found");
+        const cacheKey = `user:${id}`;
+        yield redis_1.redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, userPosts);
     }
     catch (error) {

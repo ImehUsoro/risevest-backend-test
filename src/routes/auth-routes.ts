@@ -9,6 +9,7 @@ import {
 import { validateRequestMiddleware } from "../helpers/validate-request";
 import { loginUserSchema, registerUserSchema } from "../schemas";
 import { currentUserMiddleware } from "../middleware";
+import { cacheMiddleware } from "../middleware/cacheMiddleware";
 
 const router = Router();
 
@@ -26,9 +27,9 @@ router.use(currentUserMiddleware);
 router.route("/users").get(getUsersController);
 
 //Get a user
-router.route("/users/:id/posts").get(getUserController);
+router.route("/users/:id/posts").get(cacheMiddleware, getUserController);
 
 // Get Users With The Top 3 Most Posts And Their Latest Comment
-router.route("/users/top-three").get(getTopUserPostWithLatestCommentController)
+router.route("/users/top-three").get(getTopUserPostWithLatestCommentController);
 
 export { router as authenticationRoutes };
