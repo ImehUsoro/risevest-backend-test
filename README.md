@@ -1,6 +1,6 @@
 # risevest-backend-test
 
-## Implemented this RESTFULL API with Nodejs, Typescript, Express, Postgresql, Redis and Prisma
+## Implemented this RESTFUL API with Nodejs, Typescript, Express, Postgresql, Redis and Prisma
 
 ### Documentation
 

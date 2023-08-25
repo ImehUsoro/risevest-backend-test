@@ -46,20 +46,3 @@ export const errorHandlerMiddleware = async (
     errors: [{ message: err.message }],
   });
 };
-
-export const dbErrors = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    return res
-      .status(400)
-      .json({ error: "Prisma client request error", message: err.message });
-  } else if (err instanceof Prisma.PrismaClientUnknownRequestError) {
-    console.error("Unknown Prisma error:", err);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-  next(err);
-};
