@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCachedUsers = void 0;
-const redis_1 = require("../../redis");
-const helpers_1 = require("../../helpers");
 const http_status_codes_1 = require("http-status-codes");
+const helpers_1 = require("../../helpers");
 const logger_1 = __importDefault(require("../../logger"));
+const redis_1 = require("../../redis");
 const getCachedUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const cacheKey = "users";
     try {

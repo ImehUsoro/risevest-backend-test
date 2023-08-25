@@ -1,6 +1,5 @@
-import { Post, User } from "@prisma/client";
+import { Post } from "@prisma/client";
 import { prisma } from "../prismaClient";
-import { ReturnedUser } from "./auth-service";
 
 export interface CreatePostData
   extends Omit<Post, "id" | "createdAt" | "updatedAt"> {}

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { CustomError } from "../errors";
 import Logger from "../logger";

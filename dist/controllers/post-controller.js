@@ -12,11 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePostController = exports.updatePostController = exports.getPostController = exports.getPostsController = exports.addCommentToPostController = exports.createPostController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
-const post_service_1 = require("../services/post-service");
 const helpers_1 = require("../helpers");
-const comment_service_1 = require("../services/comment-service");
-const auth_service_1 = require("../services/auth-service");
 const redis_1 = require("../redis");
+const auth_service_1 = require("../services/auth-service");
+const comment_service_1 = require("../services/comment-service");
+const post_service_1 = require("../services/post-service");
 const createPostController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { content } = req.body;

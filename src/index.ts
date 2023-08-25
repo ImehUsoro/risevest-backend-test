@@ -1,6 +1,6 @@
+import { createServer } from "http";
 import app from "./app";
 import Logger from "./logger";
-import { createServer } from "http";
 import { prisma } from "./prismaClient";
 import { redisClient } from "./redis";
 

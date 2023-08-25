@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
-import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 
 export const createCommentController = async (
   req: Request,

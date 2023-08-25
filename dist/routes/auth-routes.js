@@ -4,10 +4,10 @@ exports.authenticationRoutes = void 0;
 const express_1 = require("express");
 const auth_controller_1 = require("../controllers/auth-controller");
 const validate_request_1 = require("../helpers/validate-request");
-const schemas_1 = require("../schemas");
 const middleware_1 = require("../middleware");
-const userPosts_1 = require("../middleware/redis/userPosts");
 const user_1 = require("../middleware/redis/user");
+const userPosts_1 = require("../middleware/redis/userPosts");
+const schemas_1 = require("../schemas");
 const router = (0, express_1.Router)();
 exports.authenticationRoutes = router;
 router

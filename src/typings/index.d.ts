@@ -1,10 +1,5 @@
 import { User } from "@prisma/client";
 
-// enum UserTypes {
-//   Seller,
-//   Buyer
-// }
-
 export interface UserPayload {
   id: string;
   email: string;

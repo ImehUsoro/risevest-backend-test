@@ -7,10 +7,10 @@ import {
   registerUserController,
 } from "../controllers/auth-controller";
 import { validateRequestMiddleware } from "../helpers/validate-request";
-import { loginUserSchema, registerUserSchema } from "../schemas";
 import { currentUserMiddleware } from "../middleware";
-import { getUserPostCache } from "../middleware/redis/userPosts";
 import { getCachedUsers } from "../middleware/redis/user";
+import { getUserPostCache } from "../middleware/redis/userPosts";
+import { loginUserSchema, registerUserSchema } from "../schemas";
 
 const router = Router();
 

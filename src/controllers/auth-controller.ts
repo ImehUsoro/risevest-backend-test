@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
+import { BadRequestError, NotFoundError } from "../errors";
 import { Password, successResponse } from "../helpers";
+import { generateJWT } from "../helpers/jwt";
+import { redisClient } from "../redis";
 import {
   findAllUsersService,
   findUserPostsService,
   findUserService,
   registerUserService,
 } from "../services/auth-service";
-import { generateJWT } from "../helpers/jwt";
 import { getTopUsersWithLatestCommentsService } from "../services/post-service";
-import { redisClient } from "../redis";
 
 export const registerUserController = async (
   req: Request,

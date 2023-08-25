@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
-import { createPostService, findPostService } from "../services/post-service";
+import { NotFoundError } from "../errors";
 import { successResponse } from "../helpers";
-import { addCommentToPostService } from "../services/comment-service";
-import { findUserPostsService } from "../services/auth-service";
 import { redisClient } from "../redis";
+import { findUserPostsService } from "../services/auth-service";
+import { addCommentToPostService } from "../services/comment-service";
+import { createPostService, findPostService } from "../services/post-service";
 
 export const createPostController = async (
   req: Request,

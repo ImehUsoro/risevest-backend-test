@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const logger_1 = __importDefault(require("./logger"));
-const routes_1 = require("./routes");
-const middleware_1 = require("./middleware");
-const http_status_codes_1 = require("http-status-codes");
+const express_1 = __importDefault(require("express"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const http_status_codes_1 = require("http-status-codes");
+const logger_1 = __importDefault(require("./logger"));
+const middleware_1 = require("./middleware");
+const routes_1 = require("./routes");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));

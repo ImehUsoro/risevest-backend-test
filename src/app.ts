@@ -1,11 +1,10 @@
-import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
-import Logger from "./logger";
-import { applicationRoutes } from "./routes";
-import { dbErrors, errorHandlerMiddleware, notFound } from "./middleware";
-import { StatusCodes } from "http-status-codes";
+import express, { Application, NextFunction, Request, Response } from "express";
 import rateLimiter from "express-rate-limit";
-import { Prisma } from "@prisma/client";
+import { StatusCodes } from "http-status-codes";
+import Logger from "./logger";
+import { errorHandlerMiddleware, notFound } from "./middleware";
+import { applicationRoutes } from "./routes";
 
 const app: Application = express();
 

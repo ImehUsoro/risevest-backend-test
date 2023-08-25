@@ -3,9 +3,9 @@ import {
   addCommentToPostController,
   createPostController,
 } from "../controllers/post-controller";
+import { validateRequestMiddleware } from "../helpers/validate-request";
 import { currentUserMiddleware } from "../middleware";
 import { addCommentSchema, addPostSchema } from "../schemas";
-import { validateRequestMiddleware } from "../helpers/validate-request";
 
 const router = Router();
 

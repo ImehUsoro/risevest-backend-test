@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from "express";
-import { redisClient } from "../../redis";
-import { successResponse } from "../../helpers";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { successResponse } from "../../helpers";
 import Logger from "../../logger";
+import { redisClient } from "../../redis";
 
 export const getCachedUsers = async (
   req: Request,
