@@ -9,7 +9,18 @@ export const createPostService = async (
   content: string,
   userId: string
 ): Promise<Post | null> => {
-  const post = await prisma.post.create({ data: { content, userId } });
+  const post = await prisma.post.create({
+    data: { content, userId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
 
   return post;
 };

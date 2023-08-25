@@ -25,12 +25,12 @@ router
 router.use(currentUserMiddleware);
 
 //Get all users
-router.route("/users").get(getCachedUsers, getUsersController);
+router.route("/").get(getCachedUsers, getUsersController);
 
 //Get a user
-router.route("/users/:id/posts").get(getUserPostCache, getUserController);
+router.route("/:id/posts").get(getUserPostCache, getUserController);
 
 // Get Users With The Top 3 Most Posts And Their Latest Comment
-router.route("/users/top-three").get(getTopUserPostWithLatestCommentController);
+router.route("/top-three").get(getTopUserPostWithLatestCommentController);
 
 export { router as authenticationRoutes };

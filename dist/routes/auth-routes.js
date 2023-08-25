@@ -19,8 +19,8 @@ router
 // protected routes
 router.use(middleware_1.currentUserMiddleware);
 //Get all users
-router.route("/users").get(user_1.getCachedUsers, auth_controller_1.getUsersController);
+router.route("/").get(user_1.getCachedUsers, auth_controller_1.getUsersController);
 //Get a user
-router.route("/users/:id/posts").get(userPosts_1.getUserPostCache, auth_controller_1.getUserController);
+router.route("/:id/posts").get(userPosts_1.getUserPostCache, auth_controller_1.getUserController);
 // Get Users With The Top 3 Most Posts And Their Latest Comment
-router.route("/users/top-three").get(auth_controller_1.getTopUserPostWithLatestCommentController);
+router.route("/top-three").get(auth_controller_1.getTopUserPostWithLatestCommentController);

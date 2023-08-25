@@ -6,6 +6,6 @@ const auth_routes_1 = require("./auth-routes");
 const post_routes_1 = require("./post-routes");
 const router = (0, express_1.Router)();
 exports.applicationRoutes = router;
-router.use("/auth", auth_routes_1.authenticationRoutes);
+router.use("/users", auth_routes_1.authenticationRoutes);
 router.use("/posts", post_routes_1.postRoutes);
 router.use("/comment", auth_routes_1.authenticationRoutes);

@@ -4,7 +4,7 @@ import { postRoutes } from "./post-routes";
 
 const router = Router();
 
-router.use("/auth", authenticationRoutes);
+router.use("/users", authenticationRoutes);
 router.use("/posts", postRoutes);
 router.use("/comment", authenticationRoutes);
 

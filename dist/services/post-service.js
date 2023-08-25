@@ -12,7 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTopUsersWithLatestCommentsService = exports.findPostService = exports.createPostService = void 0;
 const prismaClient_1 = require("../prismaClient");
 const createPostService = (content, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const post = yield prismaClient_1.prisma.post.create({ data: { content, userId } });
+    const post = yield prismaClient_1.prisma.post.create({
+        data: { content, userId },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                },
+            },
+        },
+    });
     return post;
 });
 exports.createPostService = createPostService;
