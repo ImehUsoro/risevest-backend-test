@@ -91,6 +91,9 @@ export const getUsersController = async (
   try {
     const users = await findAllUsersService();
 
+    const cacheKey = "users";
+    await redisClient.set(cacheKey, JSON.stringify(users));
+
     return successResponse(res, StatusCodes.OK, users);
   } catch (error) {
     next(error);

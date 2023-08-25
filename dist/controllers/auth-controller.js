@@ -70,6 +70,8 @@ exports.loginController = loginController;
 const getUsersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield (0, auth_service_1.findAllUsersService)();
+        const cacheKey = "users";
+        yield redis_1.redisClient.set(cacheKey, JSON.stringify(users));
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, users);
     }
     catch (error) {
