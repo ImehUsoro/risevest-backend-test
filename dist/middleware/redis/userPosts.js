@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserPostCache = void 0;
-const redis_1 = require("../redis");
-const helpers_1 = require("../helpers");
+const redis_1 = require("../../redis");
+const helpers_1 = require("../../helpers");
 const http_status_codes_1 = require("http-status-codes");
-const logger_1 = __importDefault(require("../logger"));
+const logger_1 = __importDefault(require("../../logger"));
 const getUserPostCache = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const cacheKey = `user:${id}`;

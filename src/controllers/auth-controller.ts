@@ -38,6 +38,11 @@ export const registerUserController = async (
 
     delete user.password;
 
+    const users = await findAllUsersService();
+
+    const cacheKey = "users";
+    await redisClient.set(cacheKey, JSON.stringify(users));
+
     return successResponse(res, StatusCodes.CREATED, user);
   } catch (error) {
     next(error);
@@ -106,7 +111,7 @@ export const getUserController = async (
 
     const cacheKey = `user:${id}`;
 
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
+    await redisClient.set(cacheKey, JSON.stringify(userPosts));
 
     return successResponse(res, StatusCodes.OK, userPosts);
   } catch (error) {

@@ -20,7 +20,7 @@ export const createPostController = async (
     const userPosts = await findUserPostsService(req.currentUser!.id);
 
     const cacheKey = `user:${req.currentUser!.id}`;
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
+    await redisClient.set(cacheKey, JSON.stringify(userPosts));
 
     return successResponse(res, StatusCodes.CREATED, post);
   } catch (error) {
@@ -39,8 +39,6 @@ export const addCommentToPostController = async (
 
     const post = await findPostService(postId);
 
-    console.log({ post });
-
     if (!post) throw new NotFoundError("Post not found");
 
     const comment = await addCommentToPostService({
@@ -54,7 +52,7 @@ export const addCommentToPostController = async (
     const authorPosts = await findUserPostsService(post.userId);
 
     const cacheKey = `user:${post.userId}`;
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(authorPosts));
+    await redisClient.set(cacheKey, JSON.stringify(authorPosts));
 
     return successResponse(res, StatusCodes.CREATED, comment);
   } catch (error) {

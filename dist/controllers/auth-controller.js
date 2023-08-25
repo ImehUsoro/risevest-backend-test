@@ -34,6 +34,9 @@ const registerUserController = (req, res, next) => __awaiter(void 0, void 0, voi
                 .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
                 .json({ errors: [{ message: "User not created" }] });
         delete user.password;
+        const users = yield (0, auth_service_1.findAllUsersService)();
+        const cacheKey = "users";
+        yield redis_1.redisClient.set(cacheKey, JSON.stringify(users));
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.CREATED, user);
     }
     catch (error) {
@@ -81,7 +84,7 @@ const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         if (!userPosts)
             throw new errors_1.NotFoundError("User not found");
         const cacheKey = `user:${id}`;
-        yield redis_1.redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
+        yield redis_1.redisClient.set(cacheKey, JSON.stringify(userPosts));
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, userPosts);
     }
     catch (error) {

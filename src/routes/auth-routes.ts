@@ -9,7 +9,8 @@ import {
 import { validateRequestMiddleware } from "../helpers/validate-request";
 import { loginUserSchema, registerUserSchema } from "../schemas";
 import { currentUserMiddleware } from "../middleware";
-import { cacheMiddleware } from "../middleware/cacheMiddleware";
+import { getUserPostCache } from "../middleware/redis/userPosts";
+import { getCachedUsers } from "../middleware/redis/user";
 
 const router = Router();
 
@@ -24,10 +25,10 @@ router
 router.use(currentUserMiddleware);
 
 //Get all users
-router.route("/users").get(getUsersController);
+router.route("/users").get(getCachedUsers, getUsersController);
 
 //Get a user
-router.route("/users/:id/posts").get(cacheMiddleware, getUserController);
+router.route("/users/:id/posts").get(getUserPostCache, getUserController);
 
 // Get Users With The Top 3 Most Posts And Their Latest Comment
 router.route("/users/top-three").get(getTopUserPostWithLatestCommentController);

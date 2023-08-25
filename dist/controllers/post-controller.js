@@ -23,7 +23,7 @@ const createPostController = (req, res, next) => __awaiter(void 0, void 0, void 
         const post = yield (0, post_service_1.createPostService)(content, req.currentUser.id);
         const userPosts = yield (0, auth_service_1.findUserPostsService)(req.currentUser.id);
         const cacheKey = `user:${req.currentUser.id}`;
-        yield redis_1.redisClient.setEx(cacheKey, 3600, JSON.stringify(userPosts));
+        yield redis_1.redisClient.set(cacheKey, JSON.stringify(userPosts));
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.CREATED, post);
     }
     catch (error) {
@@ -36,7 +36,6 @@ const addCommentToPostController = (req, res, next) => __awaiter(void 0, void 0,
         const { postId } = req.params;
         const { content } = req.body;
         const post = yield (0, post_service_1.findPostService)(postId);
-        console.log({ post });
         if (!post)
             throw new errors_1.NotFoundError("Post not found");
         const comment = yield (0, comment_service_1.addCommentToPostService)({
@@ -47,7 +46,7 @@ const addCommentToPostController = (req, res, next) => __awaiter(void 0, void 0,
         // update the owner of the post's redis cache
         const authorPosts = yield (0, auth_service_1.findUserPostsService)(post.userId);
         const cacheKey = `user:${post.userId}`;
-        yield redis_1.redisClient.setEx(cacheKey, 3600, JSON.stringify(authorPosts));
+        yield redis_1.redisClient.set(cacheKey, JSON.stringify(authorPosts));
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.CREATED, comment);
     }
     catch (error) {

@@ -1,16 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { redisClient } from "../redis";
-import { successResponse } from "../helpers";
+import { redisClient } from "../../redis";
+import { successResponse } from "../../helpers";
 import { StatusCodes } from "http-status-codes";
-import Logger from "../logger";
+import Logger from "../../logger";
 
-export const cacheMiddleware = async (
+export const getCachedUsers = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
-  const cacheKey = `user:${id}`;
+  const cacheKey = "users";
 
   try {
     const cachedData = await redisClient.get(cacheKey);
