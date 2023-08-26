@@ -4,6 +4,7 @@ import { BadRequestError, NotFoundError } from "../errors";
 import { Password, successResponse } from "../helpers";
 import { generateJWT } from "../helpers/jwt";
 import { redisClient } from "../redis";
+
 import {
   findAllUsersService,
   findUserPostsService,
