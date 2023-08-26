@@ -1,8 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.redisClient = void 0;
 const redis_1 = require("redis");
-// export const redisClient = createClient({
-//   url: "redis://redis:6379",
-// });
-exports.redisClient = (0, redis_1.createClient)();
+// check if we're in production or not
+let redisClient;
+if (process.env.NODE_ENV === "production") {
+    const redisClient = (0, redis_1.createClient)({
+        url: "redis://red-cjl7hs0cfp5c73ffhgg0:6379",
+    });
+}
+else {
+    const redisClient = (0, redis_1.createClient)();
+}
+exports.default = redisClient;
