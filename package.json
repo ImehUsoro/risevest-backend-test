@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll --no-cache",
+    "prestart": "prisma migrate deploy",
     "start": "npm run build && node ./dist/index.js",
     "dev": "nodemon --legacy-watch --watch './src/**/*.ts' --exec 'ts-node' ./src/index.ts",
     "build": "tsc -p ."
