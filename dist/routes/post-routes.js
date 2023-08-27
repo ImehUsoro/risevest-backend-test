@@ -16,7 +16,3 @@ router
 router
     .route("/:postId/comments")
     .post(schemas_1.addCommentSchema, validate_request_1.validateRequestMiddleware, post_controller_1.addCommentToPostController);
-router.route("/").get((req, res) => { });
-router.route("/get-single/:id").get((req, res) => { });
-router.route("/update-single/:id").patch((req, res) => { });
-router.route("/delete").delete((req, res) => { });
