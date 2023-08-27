@@ -49,11 +49,11 @@ exports.findUserPostsService = findUserPostsService;
 const findAllUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield prismaClient_1.prisma.user.findMany({
         include: {
-            posts: {
-                include: {
-                    comments: true,
-                },
-            },
+        // posts: {
+        //   include: {
+        //     comments: true,
+        //   },
+        // },
         },
     });
 });

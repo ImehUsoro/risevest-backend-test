@@ -49,11 +49,11 @@ export const findUserPostsService = async (id: string) => {
 export const findAllUsersService = async (): Promise<ReturnedUser[]> => {
   return await prisma.user.findMany({
     include: {
-      posts: {
-        include: {
-          comments: true,
-        },
-      },
+      // posts: {
+      //   include: {
+      //     comments: true,
+      //   },
+      // },
     },
   });
 };
