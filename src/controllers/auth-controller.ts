@@ -90,10 +90,6 @@ export const getUsersController = async (
   next: NextFunction
 ) => {
   try {
-    // checks if user exists in the db
-    const findUser = await findUserService(req.currentUser!.id);
-    if (!findUser) throw new NotFoundError("User not found");
-
     const users = await findAllUsersService();
 
     const cacheKey = "users";
@@ -112,10 +108,6 @@ export const getUserController = async (
 ) => {
   try {
     const { id } = req.params;
-
-    // checks if user exists in the db
-    const findUser = await findUserService(req.currentUser!.id);
-    if (!findUser) throw new NotFoundError("User not found");
 
     const userPosts = await findUserPostsService(id);
 
@@ -137,10 +129,6 @@ export const getTopUserPostWithLatestCommentController = async (
   next: NextFunction
 ) => {
   try {
-    // checks if user exists in the db
-    const findUser = await findUserService(req.currentUser!.id);
-    if (!findUser) throw new NotFoundError("User not found");
-
     const users = await getTopUsersWithLatestCommentsService();
 
     return successResponse(res, StatusCodes.OK, users);

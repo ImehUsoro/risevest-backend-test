@@ -20,10 +20,6 @@ const post_service_1 = require("../services/post-service");
 const createPostController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { content } = req.body;
-        // checks if user exists in the db
-        const findUser = yield (0, auth_service_1.findUserService)(req.currentUser.id);
-        if (!findUser)
-            throw new errors_1.NotFoundError("User not found");
         const post = yield (0, post_service_1.createPostService)(content, req.currentUser.id);
         const userPosts = yield (0, auth_service_1.findUserPostsService)(req.currentUser.id);
         const cacheKey = `user:${req.currentUser.id}`;
@@ -39,9 +35,6 @@ const addCommentToPostController = (req, res, next) => __awaiter(void 0, void 0,
     try {
         const { postId } = req.params;
         const { content } = req.body;
-        const findUser = yield (0, auth_service_1.findUserService)(req.currentUser.id);
-        if (!findUser)
-            throw new errors_1.NotFoundError("User not found");
         const post = yield (0, post_service_1.findPostService)(postId);
         if (!post)
             throw new errors_1.NotFoundError("Post not found");

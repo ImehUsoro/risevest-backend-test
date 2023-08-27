@@ -69,10 +69,6 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.loginController = loginController;
 const getUsersController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // checks if user exists in the db
-        const findUser = yield (0, auth_service_1.findUserService)(req.currentUser.id);
-        if (!findUser)
-            throw new errors_1.NotFoundError("User not found");
         const users = yield (0, auth_service_1.findAllUsersService)();
         const cacheKey = "users";
         yield redis_1.redisClient.set(cacheKey, JSON.stringify(users));
@@ -86,10 +82,6 @@ exports.getUsersController = getUsersController;
 const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        // checks if user exists in the db
-        const findUser = yield (0, auth_service_1.findUserService)(req.currentUser.id);
-        if (!findUser)
-            throw new errors_1.NotFoundError("User not found");
         const userPosts = yield (0, auth_service_1.findUserPostsService)(id);
         if (!userPosts)
             throw new errors_1.NotFoundError("User not found");
@@ -104,10 +96,6 @@ const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 exports.getUserController = getUserController;
 const getTopUserPostWithLatestCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // checks if user exists in the db
-        const findUser = yield (0, auth_service_1.findUserService)(req.currentUser.id);
-        if (!findUser)
-            throw new errors_1.NotFoundError("User not found");
         const users = yield (0, post_service_1.getTopUsersWithLatestCommentsService)();
         return (0, helpers_1.successResponse)(res, http_status_codes_1.StatusCodes.OK, users);
     }

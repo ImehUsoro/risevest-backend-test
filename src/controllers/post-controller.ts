@@ -18,10 +18,6 @@ export const createPostController = async (
   try {
     const { content } = req.body;
 
-    // checks if user exists in the db
-    const findUser = await findUserService(req.currentUser!.id);
-    if (!findUser) throw new NotFoundError("User not found");
-
     const post = await createPostService(content, req.currentUser!.id);
 
     const userPosts = await findUserPostsService(req.currentUser!.id);
@@ -44,9 +40,6 @@ export const addCommentToPostController = async (
     const { postId } = req.params;
     const { content } = req.body;
 
-    const findUser = await findUserService(req.currentUser!.id);
-    if (!findUser) throw new NotFoundError("User not found");
-
     const post = await findPostService(postId);
     if (!post) throw new NotFoundError("Post not found");
 
@@ -68,5 +61,3 @@ export const addCommentToPostController = async (
     next(error);
   }
 };
-
-
