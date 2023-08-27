@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePostController = exports.updatePostController = exports.getPostController = exports.getPostsController = exports.addCommentToPostController = exports.createPostController = void 0;
+exports.addCommentToPostController = exports.createPostController = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const helpers_1 = require("../helpers");
@@ -54,11 +54,3 @@ const addCommentToPostController = (req, res, next) => __awaiter(void 0, void 0,
     }
 });
 exports.addCommentToPostController = addCommentToPostController;
-const getPostsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
-exports.getPostsController = getPostsController;
-const getPostController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
-exports.getPostController = getPostController;
-const updatePostController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
-exports.updatePostController = updatePostController;
-const deletePostController = (req, res) => __awaiter(void 0, void 0, void 0, function* () { });
-exports.deletePostController = deletePostController;

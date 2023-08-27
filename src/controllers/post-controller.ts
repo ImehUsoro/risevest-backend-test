@@ -60,10 +60,4 @@ export const addCommentToPostController = async (
   }
 };
 
-export const getPostsController = async (req: Request, res: Response) => {};
 
-export const getPostController = async (req: Request, res: Response) => {};
-
-export const updatePostController = async (req: Request, res: Response) => {};
-
-export const deletePostController = async (req: Request, res: Response) => {};
