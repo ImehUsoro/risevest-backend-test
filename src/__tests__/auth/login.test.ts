@@ -29,7 +29,7 @@ describe("Signin a Buyer", () => {
       .expect(StatusCodes.BAD_REQUEST);
   });
 
-  it("should return 400 on incorrect credentials of buyer", async () => {
+  it("should return 400 on incorrect credentials of user", async () => {
     await request
       .post(`${baseURL}/users/login`)
       .send({
