@@ -14,14 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
-const prismaClient_1 = require("../../prismaClient");
 const helpers_1 = require("../../helpers");
+const prismaClient_1 = require("../../prismaClient");
+const redis_1 = require("../../redis");
 const request = (0, supertest_1.default)(app_1.default);
 jest.mock("@prisma/client", () => {
     return {
-        Password: jest.fn().mockImplementation(() => {
-            return { comparePassword: jest.fn() };
-        }),
         PrismaClient: jest.fn(() => ({
             $use: jest.fn(),
             $on: jest.fn(),
@@ -35,36 +33,39 @@ jest.mock("@prisma/client", () => {
         })),
     };
 });
+jest.mock("redis", () => {
+    return {
+        createClient: jest.fn(() => ({
+            set: jest.fn(),
+        })),
+    };
+});
 beforeEach(() => {
     prismaClient_1.prisma.user.findUnique.mockClear();
+    prismaClient_1.prisma.user.create.mockClear();
+    prismaClient_1.prisma.user.findMany.mockClear();
 });
 afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield prismaClient_1.prisma.$disconnect();
 }));
-describe("Sign In User Controller", () => {
-    it("should sign in a user", () => __awaiter(void 0, void 0, void 0, function* () {
-        prismaClient_1.prisma.user.findUnique.mockResolvedValue(helpers_1.newLoginUser);
-        const mockComparePassword = jest.fn().mockResolvedValue(true);
-        helpers_1.Password.comparePassword = mockComparePassword;
-        const response = yield request
-            .post(`${helpers_1.baseURL}/users/login`)
-            .send(helpers_1.userLoginCredential);
-        expect(response.status).toBe(200);
-    }));
-    it("should return an error if user does not exist", () => __awaiter(void 0, void 0, void 0, function* () {
+describe("Register User Controller", () => {
+    it("should register a new user", () => __awaiter(void 0, void 0, void 0, function* () {
         prismaClient_1.prisma.user.findUnique.mockResolvedValue(null);
+        prismaClient_1.prisma.user.create.mockResolvedValue(helpers_1.resolvedNewUser);
+        redis_1.redisClient.set.mockResolvedValue(null);
         const response = yield request
-            .post(`${helpers_1.baseURL}/users/login`)
-            .send(helpers_1.userLoginCredential);
-        expect(response.status).toBe(401);
+            .post(`${helpers_1.baseURL}/users/register-user`)
+            .send(helpers_1.newUser);
+        expect(response.status).toBe(201);
     }));
-    it("should return an error if password is incorrect", () => __awaiter(void 0, void 0, void 0, function* () {
-        prismaClient_1.prisma.user.findUnique.mockResolvedValue(helpers_1.newLoginUser);
-        const mockComparePassword = jest.fn().mockResolvedValue(false);
-        helpers_1.Password.comparePassword = mockComparePassword;
+    it("should return an error if user already exists", () => __awaiter(void 0, void 0, void 0, function* () {
+        prismaClient_1.prisma.user.findUnique.mockResolvedValue(helpers_1.resolvedNewUser);
         const response = yield request
-            .post(`${helpers_1.baseURL}/users/login`)
-            .send(helpers_1.userLoginCredential);
-        expect(response.status).toBe(401);
+            .post(`${helpers_1.baseURL}/users/register-user`)
+            .send(helpers_1.newUser)
+            .expect(409);
+        const { errors } = response.body;
+        expect(response.status).toBe(409);
+        expect(errors[0].message).toBe("User already exists");
     }));
 });

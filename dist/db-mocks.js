@@ -4,13 +4,10 @@ exports.redisMock = exports.prismaMock = void 0;
 // jest.mock("./prismaClient.ts");
 const jest_mock_extended_1 = require("jest-mock-extended");
 const redis_1 = require("redis");
-// Deep-mock the Prisma Client
 exports.prismaMock = (0, jest_mock_extended_1.mockDeep)();
-// Reset the mock
 beforeEach(() => {
     (0, jest_mock_extended_1.mockReset)(exports.prismaMock);
 });
-// export default prismaMock;
 const redisClient = (0, redis_1.createClient)();
 exports.redisMock = (0, jest_mock_extended_1.mockDeep)();
 beforeEach(() => {

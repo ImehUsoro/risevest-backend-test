@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError, NotFoundError } from "../errors";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 import { Password, successResponse } from "../helpers";
 import { generateJWT } from "../helpers/jwt";
 import { redisClient } from "../redis";
@@ -12,6 +12,7 @@ import {
   registerUserService,
 } from "../services/auth-service";
 import { getTopUsersWithLatestCommentsService } from "../services/post-service";
+import { ConflictError } from "../errors/conflict";
 
 export const registerUserController = async (
   req: Request,
@@ -23,7 +24,7 @@ export const registerUserController = async (
 
     const userExists = await findUserService(email);
 
-    if (userExists) throw new BadRequestError("User already exists");
+    if (userExists) throw new ConflictError("User already exists");
 
     const user = await registerUserService({
       firstName,
@@ -60,16 +61,16 @@ export const loginController = async (
 
     const user = await findUserService(email);
 
-    if (!user) throw new BadRequestError("Invalid credentials");
+    if (!user) throw new UnauthorizedError("Invalid Credentials");
 
     const passwordMatch = await Password.comparePassword(
       password,
       user?.password!
     );
 
-    if (!passwordMatch) throw new BadRequestError("Invalid credentials");
+    if (!passwordMatch) throw new UnauthorizedError("Invalid Credentials");
 
-    const userJWT = generateJWT(req, {
+    const userJWT = generateJWT({
       id: user.id,
       email: user.email,
       firstName: user.firstName,

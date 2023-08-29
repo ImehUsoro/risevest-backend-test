@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyJWT = exports.generateJWT = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const errors_1 = require("../errors");
-const generateJWT = (req, payload) => {
+const generateJWT = (payload) => {
     const exp = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // 7 days
     const userJWT = jsonwebtoken_1.default.sign(Object.assign(Object.assign({}, payload), { exp }), process.env.JWT_SECRET);
     return userJWT;

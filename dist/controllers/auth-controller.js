@@ -17,12 +17,13 @@ const jwt_1 = require("../helpers/jwt");
 const redis_1 = require("../redis");
 const auth_service_1 = require("../services/auth-service");
 const post_service_1 = require("../services/post-service");
+const conflict_1 = require("../errors/conflict");
 const registerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstName, lastName, email, password } = req.body;
         const userExists = yield (0, auth_service_1.findUserService)(email);
         if (userExists)
-            throw new errors_1.BadRequestError("User already exists");
+            throw new conflict_1.ConflictError("User already exists");
         const user = yield (0, auth_service_1.registerUserService)({
             firstName,
             lastName,
@@ -49,11 +50,11 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         const { email, password } = req.body;
         const user = yield (0, auth_service_1.findUserService)(email);
         if (!user)
-            throw new errors_1.BadRequestError("Invalid credentials");
+            throw new errors_1.UnauthorizedError("Invalid Credentials");
         const passwordMatch = yield helpers_1.Password.comparePassword(password, user === null || user === void 0 ? void 0 : user.password);
         if (!passwordMatch)
-            throw new errors_1.BadRequestError("Invalid credentials");
-        const userJWT = (0, jwt_1.generateJWT)(req, {
+            throw new errors_1.UnauthorizedError("Invalid Credentials");
+        const userJWT = (0, jwt_1.generateJWT)({
             id: user.id,
             email: user.email,
             firstName: user.firstName,

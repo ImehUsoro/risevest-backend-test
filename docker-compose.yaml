@@ -11,6 +11,7 @@ services:
       - redis
     environment:
       DATABASE_URL: "postgresql://imehusoro:imehusoro@postgres:5432/risevest-db?schema=public"
+      REDIS_URL: "rediss://red-cjl7hs0cfp5c73ffhgg0:PgGFr4F3enI5IPRH6vjKlfB4f6VxInwJ@oregon-redis.render.com:6379"
 
   postgres:
     image: postgres:latest
