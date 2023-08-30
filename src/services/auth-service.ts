@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Post, User } from "@prisma/client";
 import { prisma } from "../prismaClient";
 
 export interface CreateUserData
@@ -24,22 +24,25 @@ export const findUserService = async (
 
 export const findUserPostsService = async (
   id: string
-): Promise<ReturnedUser | null> => {
-  return await prisma.user.findUnique({
-    where: { id },
+): Promise<Post[] | null> => {
+  return await prisma.post.findMany({
+    where: { userId: id },
     include: {
-      posts: {
-        include: {
-          comments: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+      comments: {
+        select: {
+          content: true,
+          user: {
             select: {
-              content: true,
-              user: {
-                select: {
-                  firstName: true,
-                  lastName: true,
-                  createdAt: true,
-                },
-              },
+              id: true,
+              firstName: true,
+              lastName: true,
             },
           },
         },
@@ -58,12 +61,5 @@ export const findAllUsersService = async (): Promise<ReturnedUser[]> => {
       createdAt: true,
       updatedAt: true,
     },
-    // include: {
-    // posts: {
-    //   include: {
-    //     comments: true,
-    //   },
-    // },
-    // },
   });
 };
