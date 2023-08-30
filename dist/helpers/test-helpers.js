@@ -1,12 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newLoginUser = exports.userLoginCredential = exports.resolvedNewUser = exports.newUser = exports.baseURL = void 0;
+exports.newLoginUser = exports.userLoginCredential = exports.resolvedNewUser = exports.currentUser = exports.newUser = exports.baseURL = void 0;
 exports.baseURL = "/api/v1";
 exports.newUser = {
     firstName: "Thelma",
     lastName: "Nwokeji",
     email: "thelma@gmail.com",
     password: "123456",
+};
+exports.currentUser = {
+    id: "68e81d64-0efb-48ef-852b-4e4933a1869c",
+    email: "imeusoro@rocketmail.com",
+    firstName: "Imeh",
+    lastName: "Usoro",
 };
 exports.resolvedNewUser = {
     message: "success",

@@ -48,13 +48,21 @@ const findUserPostsService = (id) => __awaiter(void 0, void 0, void 0, function*
 exports.findUserPostsService = findUserPostsService;
 const findAllUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield prismaClient_1.prisma.user.findMany({
-        include: {
+        select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+        // include: {
         // posts: {
         //   include: {
         //     comments: true,
         //   },
         // },
-        },
+        // },
     });
 });
 exports.findAllUsersService = findAllUsersService;

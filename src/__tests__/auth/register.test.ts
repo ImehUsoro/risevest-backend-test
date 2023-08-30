@@ -34,6 +34,7 @@ beforeEach(() => {
   (prisma.user.findUnique as jest.Mock).mockClear();
   (prisma.user.create as jest.Mock).mockClear();
   (prisma.user.findMany as jest.Mock).mockClear();
+  (redisClient.set as jest.Mock).mockClear();
 });
 
 afterAll(async () => {
@@ -51,6 +52,9 @@ describe("Register User Controller", () => {
       .send(newUser);
 
     expect(response.status).toBe(201);
+    expect(redisClient.set).toHaveBeenCalled();
+    expect(prisma.user.create).toHaveBeenCalled();
+    expect(prisma.user.findUnique).toHaveBeenCalled();
   });
 
   it("should return an error if user already exists", async () => {

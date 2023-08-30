@@ -7,6 +7,13 @@ export const newUser = {
   password: "123456",
 };
 
+export const currentUser = {
+  id: "68e81d64-0efb-48ef-852b-4e4933a1869c",
+  email: "imeusoro@rocketmail.com",
+  firstName: "Imeh",
+  lastName: "Usoro",
+};
+
 export const resolvedNewUser = {
   message: "success",
   data: {

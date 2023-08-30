@@ -48,12 +48,20 @@ export const findUserPostsService = async (id: string) => {
 
 export const findAllUsersService = async (): Promise<ReturnedUser[]> => {
   return await prisma.user.findMany({
-    include: {
-      // posts: {
-      //   include: {
-      //     comments: true,
-      //   },
-      // },
+    select: {
+      id: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      createdAt: true,
+      updatedAt: true,
     },
+    // include: {
+    // posts: {
+    //   include: {
+    //     comments: true,
+    //   },
+    // },
+    // },
   });
 };

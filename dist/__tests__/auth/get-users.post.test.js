@@ -16,6 +16,8 @@ const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
 const helpers_1 = require("../../helpers");
 const prismaClient_1 = require("../../prismaClient");
+const redis_1 = require("../../redis");
+const middleware_1 = require("../../middleware");
 const request = (0, supertest_1.default)(app_1.default);
 jest.mock("@prisma/client", () => {
     return {
@@ -30,16 +32,36 @@ jest.mock("@prisma/client", () => {
         })),
     };
 });
+jest.mock("redis", () => {
+    return {
+        createClient: jest.fn(() => ({
+            set: jest.fn(),
+            get: jest.fn(),
+        })),
+    };
+});
+jest.mock("../../middleware/current-user.ts", () => {
+    return {
+        currentUserMiddleware: jest.fn((req, res, next) => {
+            req.currentUser = helpers_1.currentUser;
+            next();
+        }),
+    };
+});
 beforeEach(() => {
     prismaClient_1.prisma.user.findMany.mockClear();
+    redis_1.redisClient.get.mockClear();
+    middleware_1.currentUserMiddleware.mockClear();
 });
 afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield prismaClient_1.prisma.$disconnect();
 }));
 describe("Get Users Controller", () => {
-    it("should get all users", () => __awaiter(void 0, void 0, void 0, function* () {
+    it("should get all users when there is a bearer token", () => __awaiter(void 0, void 0, void 0, function* () {
         prismaClient_1.prisma.user.findMany.mockResolvedValue([helpers_1.resolvedNewUser]);
+        redis_1.redisClient.get.mockResolvedValue(null);
         const response = yield request.get(`${helpers_1.baseURL}/users`);
         expect(response.status).toBe(200);
+        expect(redis_1.redisClient.get).toHaveBeenCalled();
     }));
 });

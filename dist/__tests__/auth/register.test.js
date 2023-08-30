@@ -44,6 +44,7 @@ beforeEach(() => {
     prismaClient_1.prisma.user.findUnique.mockClear();
     prismaClient_1.prisma.user.create.mockClear();
     prismaClient_1.prisma.user.findMany.mockClear();
+    redis_1.redisClient.set.mockClear();
 });
 afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield prismaClient_1.prisma.$disconnect();
@@ -57,6 +58,9 @@ describe("Register User Controller", () => {
             .post(`${helpers_1.baseURL}/users/register-user`)
             .send(helpers_1.newUser);
         expect(response.status).toBe(201);
+        expect(redis_1.redisClient.set).toHaveBeenCalled();
+        expect(prismaClient_1.prisma.user.create).toHaveBeenCalled();
+        expect(prismaClient_1.prisma.user.findUnique).toHaveBeenCalled();
     }));
     it("should return an error if user already exists", () => __awaiter(void 0, void 0, void 0, function* () {
         prismaClient_1.prisma.user.findUnique.mockResolvedValue(helpers_1.resolvedNewUser);
