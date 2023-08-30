@@ -1,11 +1,10 @@
+import { NextFunction, Request, Response } from "express";
 import supertest from "supertest";
 import app from "../../app";
-import { baseURL, currentUser, resolvedNewUser } from "../../helpers";
+import { baseURL, currentUser } from "../../helpers";
+import { currentUserMiddleware } from "../../middleware";
 import { prisma } from "../../prismaClient";
 import { redisClient } from "../../redis";
-import { NextFunction, Request, Response } from "express";
-import { currentUserMiddleware } from "../../middleware";
-import e from "cors";
 
 const request = supertest(app);
 
@@ -44,6 +43,17 @@ jest.mock("../../middleware/current-user.ts", () => {
       }
     ),
   };
+});
+
+beforeEach(() => {
+  (prisma.user.findMany as jest.Mock).mockClear();
+  (redisClient.get as jest.Mock).mockClear();
+  (currentUserMiddleware as jest.Mock).mockClear();
+  (prisma.comment.findFirst as jest.Mock).mockClear();
+});
+
+afterAll(async () => {
+  await prisma.$disconnect();
 });
 
 describe("Get Top Users Controller", () => {

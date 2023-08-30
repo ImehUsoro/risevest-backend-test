@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
-const prismaClient_1 = require("../../prismaClient");
 const helpers_1 = require("../../helpers");
+const prismaClient_1 = require("../../prismaClient");
 const request = (0, supertest_1.default)(app_1.default);
 jest.mock("@prisma/client", () => {
     return {

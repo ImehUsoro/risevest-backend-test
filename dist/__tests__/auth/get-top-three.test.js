@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
 const helpers_1 = require("../../helpers");
+const middleware_1 = require("../../middleware");
 const prismaClient_1 = require("../../prismaClient");
+const redis_1 = require("../../redis");
 const request = (0, supertest_1.default)(app_1.default);
 jest.mock("@prisma/client", () => {
     return {
@@ -49,6 +51,15 @@ jest.mock("../../middleware/current-user.ts", () => {
         }),
     };
 });
+beforeEach(() => {
+    prismaClient_1.prisma.user.findMany.mockClear();
+    redis_1.redisClient.get.mockClear();
+    middleware_1.currentUserMiddleware.mockClear();
+    prismaClient_1.prisma.comment.findFirst.mockClear();
+});
+afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+    yield prismaClient_1.prisma.$disconnect();
+}));
 describe("Get Top Users Controller", () => {
     it("should get top three users with latest comment when there is a bearer token", () => __awaiter(void 0, void 0, void 0, function* () {
         prismaClient_1.prisma.user.findMany.mockResolvedValue([helpers_1.currentUser]);

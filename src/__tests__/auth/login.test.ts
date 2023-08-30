@@ -1,13 +1,13 @@
 import supertest from "supertest";
 
 import app from "../../app";
-import { prisma } from "../../prismaClient";
 import {
   Password,
   baseURL,
   newLoginUser,
   userLoginCredential,
 } from "../../helpers";
+import { prisma } from "../../prismaClient";
 
 const request = supertest(app);
 

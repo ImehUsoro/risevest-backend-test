@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import supertest from "supertest";
 import app from "../../app";
-import { baseURL, currentUser } from "../../helpers";
+import { baseURL, createdPost, currentUser } from "../../helpers";
 import { currentUserMiddleware } from "../../middleware";
 import { prisma } from "../../prismaClient";
 import { redisClient } from "../../redis";
@@ -18,6 +18,12 @@ jest.mock("@prisma/client", () => {
         findMany: jest.fn(),
         findUnique: jest.fn(),
       },
+      comment: {
+        findFirst: jest.fn(),
+      },
+      post: {
+        create: jest.fn(),
+      },
       $disconnect: jest.fn(),
     })),
   };
@@ -27,7 +33,6 @@ jest.mock("redis", () => {
   return {
     createClient: jest.fn(() => ({
       set: jest.fn(),
-      get: jest.fn(),
     })),
   };
 });
@@ -45,31 +50,35 @@ jest.mock("../../middleware/current-user.ts", () => {
 
 beforeEach(() => {
   (prisma.user.findMany as jest.Mock).mockClear();
-  (redisClient.get as jest.Mock).mockClear();
+  (prisma.user.findUnique as jest.Mock).mockClear();
+  (redisClient.set as jest.Mock).mockClear();
   (currentUserMiddleware as jest.Mock).mockClear();
+  (prisma.comment.findFirst as jest.Mock).mockClear();
+  (prisma.post.create as jest.Mock).mockClear();
 });
 
 afterAll(async () => {
   await prisma.$disconnect();
 });
 
-describe("Get User Posts Controller", () => {
-  it("should return a 404 if user does not exist", async () => {
-    (prisma.user.findUnique as jest.Mock).mockResolvedValue(false);
+describe("Add Post Controller", () => {
+  it("should add a new post", async () => {
+    (prisma.post.create as jest.Mock).mockResolvedValue(createdPost);
+    (prisma.user.findUnique as jest.Mock).mockResolvedValue([currentUser]);
 
-    const response = await request.get(`${baseURL}/users/1/posts`);
+    const response = await request.post(`${baseURL}/posts/create`).send({
+      content: "new post",
+    });
 
-    const { errors } = response.body;
-    expect(response.status).toBe(404);
-    expect(errors[0].message).toBe("User not found");
+    expect(response.status).toBe(201);
+    expect(redisClient.set).toHaveBeenCalled();
   });
 
-  it("should call the redis set method and return a 200 if all is okay", async () => {
-    (prisma.user.findUnique as jest.Mock).mockResolvedValue(true);
+  it("should return an error if no content is passed", async () => {
+    const response = await request.post(`${baseURL}/posts/create`).send({});
 
-    const response = await request.get(`${baseURL}/users/1/posts`);
-
-    expect(response.status).toBe(200);
-    expect(redisClient.get).toHaveBeenCalled();
+    const { errors } = response.body;
+    expect(response.status).toBe(400);
+    expect(errors[0].msg).toBe("Content is required");
   });
 });

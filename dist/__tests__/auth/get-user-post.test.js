@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
 const helpers_1 = require("../../helpers");
+const middleware_1 = require("../../middleware");
 const prismaClient_1 = require("../../prismaClient");
 const redis_1 = require("../../redis");
-const middleware_1 = require("../../middleware");
 const request = (0, supertest_1.default)(app_1.default);
 jest.mock("@prisma/client", () => {
     return {

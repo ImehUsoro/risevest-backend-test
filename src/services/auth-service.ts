@@ -22,7 +22,9 @@ export const findUserService = async (
   });
 };
 
-export const findUserPostsService = async (id: string) => {
+export const findUserPostsService = async (
+  id: string
+): Promise<ReturnedUser | null> => {
   return await prisma.user.findUnique({
     where: { id },
     include: {
