@@ -25,6 +25,7 @@ jest.mock("@prisma/client", () => {
       },
       post: {
         findUnique: jest.fn(),
+        findMany: jest.fn(),
       },
       comment: {
         create: jest.fn(),
@@ -89,6 +90,7 @@ describe("Add Comment Controller", () => {
 
   it("should add a new comment", async () => {
     (prisma.post.findUnique as jest.Mock).mockResolvedValue(mockPost);
+    (prisma.post.findMany as jest.Mock).mockResolvedValue(null);
     (prisma.comment.create as jest.Mock).mockResolvedValue(createdComment);
     (prisma.user.findUnique as jest.Mock).mockResolvedValue(currentUser);
 

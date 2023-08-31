@@ -23,6 +23,7 @@ jest.mock("@prisma/client", () => {
       },
       post: {
         create: jest.fn(),
+        findMany: jest.fn(),
       },
       $disconnect: jest.fn(),
     })),
@@ -64,6 +65,7 @@ afterAll(async () => {
 describe("Add Post Controller", () => {
   it("should add a new post", async () => {
     (prisma.post.create as jest.Mock).mockResolvedValue(createdPost);
+    (prisma.post.findMany as jest.Mock).mockResolvedValue(null);
     (prisma.user.findUnique as jest.Mock).mockResolvedValue([currentUser]);
 
     const response = await request.post(`${baseURL}/posts/create`).send({

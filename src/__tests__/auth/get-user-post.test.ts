@@ -18,6 +18,9 @@ jest.mock("@prisma/client", () => {
         findMany: jest.fn(),
         findUnique: jest.fn(),
       },
+      post: {
+        findMany: jest.fn(),
+      },
       $disconnect: jest.fn(),
     })),
   };

@@ -50,7 +50,6 @@ export const addCommentToPostController = async (
     });
 
     // update the owner of the post's redis cache
-
     const authorPosts = await findUserPostsService(post.userId);
 
     const cacheKey = `user:${post.userId}`;

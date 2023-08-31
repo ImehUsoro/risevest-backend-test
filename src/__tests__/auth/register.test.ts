@@ -44,6 +44,7 @@ afterAll(async () => {
 describe("Register User Controller", () => {
   it("should register a new user", async () => {
     (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+    (prisma.user.findMany as jest.Mock).mockResolvedValue(null);
     (prisma.user.create as jest.Mock).mockResolvedValue(resolvedNewUser);
     (redisClient.set as jest.Mock).mockResolvedValue(null);
 

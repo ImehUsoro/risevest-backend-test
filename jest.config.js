@@ -6,5 +6,5 @@ module.exports = {
     testMatch: ["**/**/*.test.ts"],
     verbose: true,
     forceExit: true,
-    setupFilesAfterEnv: ["./src/jest.setup.ts"],
+    // setupFilesAfterEnv: ["./src/jest.setup.ts"],
 };

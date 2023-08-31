@@ -22,29 +22,63 @@ export const findUserService = async (
   });
 };
 
-export const findUserPostsService = async (
-  id: string
-): Promise<Post[] | null> => {
-  return await prisma.post.findMany({
-    where: { userId: id },
-    include: {
-      user: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-        },
-      },
-      comments: {
-        select: {
-          content: true,
-          user: {
+// export const findUserPostsService = async (
+//   id: string
+// ): Promise<Post[] | null> => {
+//   return await prisma.post.findMany({
+//     where: { userId: id },
+//     include: {
+//       user: {
+//         select: {
+//           id: true,
+//           firstName: true,
+//           lastName: true,
+//         },
+//       },
+//       comments: {
+//         select: {
+//           content: true,
+//           user: {
+//             select: {
+//               id: true,
+//               firstName: true,
+//               lastName: true,
+//             },
+//           },
+//         },
+//       },
+//     },
+//   });
+// };
+
+export const findUserPostsService = async (id: string) => {
+  return await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      posts: {
+        include: {
+          comments: {
             select: {
-              id: true,
-              firstName: true,
-              lastName: true,
+              content: true,
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                  createdAt: true,
+                },
+              },
             },
           },
+        },
+      },
+      _count: {
+        select: {
+          posts: true,
+          comments: true,
         },
       },
     },
