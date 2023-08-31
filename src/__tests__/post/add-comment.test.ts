@@ -4,9 +4,8 @@ import app from "../../app";
 import {
   baseURL,
   createdComment,
-  createdPost,
   currentUser,
-  mockPost,
+  mockPost
 } from "../../helpers";
 import { currentUserMiddleware } from "../../middleware";
 import { prisma } from "../../prismaClient";

@@ -15,9 +15,9 @@ const errors_1 = require("../errors");
 const helpers_1 = require("../helpers");
 const jwt_1 = require("../helpers/jwt");
 const redis_1 = require("../redis");
+const conflict_1 = require("../errors/conflict");
 const auth_service_1 = require("../services/auth-service");
 const post_service_1 = require("../services/post-service");
-const conflict_1 = require("../errors/conflict");
 const registerUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstName, lastName, email, password } = req.body;

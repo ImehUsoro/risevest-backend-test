@@ -22,27 +22,62 @@ const findUserService = (email) => __awaiter(void 0, void 0, void 0, function* (
     });
 });
 exports.findUserService = findUserService;
+// export const findUserPostsService = async (
+//   id: string
+// ): Promise<Post[] | null> => {
+//   return await prisma.post.findMany({
+//     where: { userId: id },
+//     include: {
+//       user: {
+//         select: {
+//           id: true,
+//           firstName: true,
+//           lastName: true,
+//         },
+//       },
+//       comments: {
+//         select: {
+//           content: true,
+//           user: {
+//             select: {
+//               id: true,
+//               firstName: true,
+//               lastName: true,
+//             },
+//           },
+//         },
+//       },
+//     },
+//   });
+// };
 const findUserPostsService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prismaClient_1.prisma.post.findMany({
-        where: { userId: id },
-        include: {
-            user: {
-                select: {
-                    id: true,
-                    firstName: true,
-                    lastName: true,
-                },
-            },
-            comments: {
-                select: {
-                    content: true,
-                    user: {
+    return yield prismaClient_1.prisma.user.findUnique({
+        where: { id },
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            posts: {
+                include: {
+                    comments: {
                         select: {
-                            id: true,
-                            firstName: true,
-                            lastName: true,
+                            content: true,
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    createdAt: true,
+                                },
+                            },
                         },
                     },
+                },
+            },
+            _count: {
+                select: {
+                    posts: true,
+                    comments: true,
                 },
             },
         },

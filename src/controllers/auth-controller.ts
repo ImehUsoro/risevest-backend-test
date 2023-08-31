@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
+import { NotFoundError, UnauthorizedError } from "../errors";
 import { Password, successResponse } from "../helpers";
 import { generateJWT } from "../helpers/jwt";
 import { redisClient } from "../redis";
 
+import { ConflictError } from "../errors/conflict";
 import {
   findAllUsersService,
   findUserPostsService,
@@ -12,7 +13,6 @@ import {
   registerUserService,
 } from "../services/auth-service";
 import { getTopUsersWithLatestCommentsService } from "../services/post-service";
-import { ConflictError } from "../errors/conflict";
 
 export const registerUserController = async (
   req: Request,

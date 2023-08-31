@@ -34,6 +34,7 @@ jest.mock("@prisma/client", () => {
             },
             post: {
                 create: jest.fn(),
+                findMany: jest.fn(),
             },
             $disconnect: jest.fn(),
         })),
@@ -68,6 +69,7 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
 describe("Add Post Controller", () => {
     it("should add a new post", () => __awaiter(void 0, void 0, void 0, function* () {
         prismaClient_1.prisma.post.create.mockResolvedValue(helpers_1.createdPost);
+        prismaClient_1.prisma.post.findMany.mockResolvedValue(null);
         prismaClient_1.prisma.user.findUnique.mockResolvedValue([helpers_1.currentUser]);
         const response = yield request.post(`${helpers_1.baseURL}/posts/create`).send({
             content: "new post",

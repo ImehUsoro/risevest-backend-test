@@ -14,13 +14,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
+const helpers_1 = require("../../helpers");
+const middleware_1 = require("../../middleware");
+const prismaClient_1 = require("../../prismaClient");
+const redis_1 = require("../../redis");
 const request = (0, supertest_1.default)(app_1.default);
-describe("users", () => {
-    describe("GET /users", () => {
-        describe("given the request is okay", () => {
-            it("should return 200", () => __awaiter(void 0, void 0, void 0, function* () {
-                // await request.get(`${baseURL}/users`).expect(200);
-            }));
-        });
-    });
+jest.mock("@prisma/client", () => {
+    return {
+        PrismaClient: jest.fn(() => ({
+            $use: jest.fn(),
+            $on: jest.fn(),
+            PrismaClientKnownRequestError: jest.fn(),
+            user: {
+                findMany: jest.fn(),
+            },
+            $disconnect: jest.fn(),
+        })),
+    };
+});
+jest.mock("redis", () => {
+    return {
+        createClient: jest.fn(() => ({
+            set: jest.fn(),
+            get: jest.fn(),
+        })),
+    };
+});
+jest.mock("../../middleware/current-user.ts", () => {
+    return {
+        currentUserMiddleware: jest.fn((req, res, next) => {
+            req.currentUser = helpers_1.currentUser;
+            next();
+        }),
+    };
+});
+beforeEach(() => {
+    prismaClient_1.prisma.user.findMany.mockClear();
+    redis_1.redisClient.get.mockClear();
+    middleware_1.currentUserMiddleware.mockClear();
+});
+afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+    yield prismaClient_1.prisma.$disconnect();
+}));
+describe("Get Users Controller", () => {
+    it("should get all users when there is a bearer token", () => __awaiter(void 0, void 0, void 0, function* () {
+        prismaClient_1.prisma.user.findMany.mockResolvedValue([helpers_1.resolvedNewUser]);
+        redis_1.redisClient.get.mockResolvedValue(null);
+        const response = yield request.get(`${helpers_1.baseURL}/users`);
+        expect(response.status).toBe(200);
+        expect(redis_1.redisClient.get).toHaveBeenCalled();
+    }));
 });

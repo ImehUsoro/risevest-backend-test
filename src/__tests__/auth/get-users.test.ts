@@ -1,10 +1,10 @@
+import { NextFunction, Request, Response } from "express";
 import supertest from "supertest";
 import app from "../../app";
 import { baseURL, currentUser, resolvedNewUser } from "../../helpers";
+import { currentUserMiddleware } from "../../middleware";
 import { prisma } from "../../prismaClient";
 import { redisClient } from "../../redis";
-import { NextFunction, Request, Response } from "express";
-import { currentUserMiddleware } from "../../middleware";
 
 const request = supertest(app);
 

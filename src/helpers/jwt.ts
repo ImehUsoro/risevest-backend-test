@@ -1,4 +1,3 @@
-import { Request } from "express";
 import jwt from "jsonwebtoken";
 import { BadRequestError } from "../errors";
 import { UserPayload } from "../typings";

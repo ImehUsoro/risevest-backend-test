@@ -52,6 +52,7 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
 describe("Register User Controller", () => {
     it("should register a new user", () => __awaiter(void 0, void 0, void 0, function* () {
         prismaClient_1.prisma.user.findUnique.mockResolvedValue(null);
+        prismaClient_1.prisma.user.findMany.mockResolvedValue(null);
         prismaClient_1.prisma.user.create.mockResolvedValue(helpers_1.resolvedNewUser);
         redis_1.redisClient.set.mockResolvedValue(null);
         const response = yield request

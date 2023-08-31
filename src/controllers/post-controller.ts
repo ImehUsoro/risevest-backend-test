@@ -4,8 +4,7 @@ import { NotFoundError } from "../errors";
 import { successResponse } from "../helpers";
 import { redisClient } from "../redis";
 import {
-  findUserPostsService,
-  findUserService,
+  findUserPostsService
 } from "../services/auth-service";
 import { addCommentToPostService } from "../services/comment-service";
 import { createPostService, findPostService } from "../services/post-service";

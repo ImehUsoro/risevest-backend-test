@@ -2,11 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import supertest from "supertest";
 import app from "../../app";
 import { baseURL, currentUser } from "../../helpers";
-import { currentUserMiddleware } from "../../middleware";
 import { prisma } from "../../prismaClient";
-import { redisClient } from "../../redis";
 
 const request = supertest(app);
+
 
 jest.mock("@prisma/client", () => {
   return {
@@ -45,16 +44,16 @@ jest.mock("../../middleware/current-user.ts", () => {
   };
 });
 
-beforeEach(() => {
-  (prisma.user.findMany as jest.Mock).mockClear();
-  (redisClient.get as jest.Mock).mockClear();
-  (currentUserMiddleware as jest.Mock).mockClear();
-  (prisma.comment.findFirst as jest.Mock).mockClear();
-});
+// beforeEach(() => {
+//   (prisma.user.findMany as jest.Mock).mockClear();
+//   (redisClient.get as jest.Mock).mockClear();
+//   (currentUserMiddleware as jest.Mock).mockClear();
+//   (prisma.comment.findFirst as jest.Mock).mockClear();
+// });
 
-afterAll(async () => {
-  await prisma.$disconnect();
-});
+// afterAll(async () => {
+//   await prisma.$disconnect();
+// });
 
 describe("Get Top Users Controller", () => {
   it("should get top three users with latest comment when there is a bearer token", async () => {
